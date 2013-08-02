@@ -1,6 +1,11 @@
 ﻿<#@ template language="C#" HostSpecific="True" #>
 <#
 MvcTextTemplateHost mvcHost = (MvcTextTemplateHost)(Host);
+
+string typeLibraryClassName = mvcHost.ControllerRootName;
+string bsClassName = typeLibraryClassName + "Bs";
+
+
 #>
 using System;
 using System.Collections.Generic;
@@ -10,97 +15,128 @@ using System.Web.Mvc;
 
 namespace <#= mvcHost.Namespace #>
 {
-    public class <#= mvcHost.ControllerName #> : Controller
+    public class <#= mvcHost.ControllerName #> : _BaseKarkasController
     {
         //
         // GET: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/
 
         public ActionResult Index()
         {
-            return View();
+			<#= bsClassName #> bs = new <#= bsClassName #>();
+			var list = bs.SorgulaHepsiniGetir();
+			return View(list);
         }
 
 <#
 if(mvcHost.AddActionMethods) {
 #>
         //
-        // GET: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Details/5
+        // GET: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Detay/5
 
-        public ActionResult Detay(int id)
+        public ActionResult Detay(int key)
         {
-            return View();
+			<#= bsClassName #> bs = new <#= bsClassName #>();
+			<#=typeLibraryClassName #> dto = bs.Sorgula<#=typeLibraryClassName #>KeyIle(key);
+			if (dto == null)
+			{
+				return HttpNotFound();
+			}
+			return View(dto);
         }
 
         //
         // GET: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Create
 
-        public ActionResult Create()
+        public ActionResult Ekle()
         {
             return View();
         }
 
         //
-        // POST: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Create
+        // POST: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Ekle
 
         [HttpPost]
-        public ActionResult Ekle(FormCollection collection)
+		[ValidateAntiForgeryToken]
+        public ActionResult Ekle(<#=typeLibraryClassName #> dto)
+        {
+			  try
+				{
+					if (ModelState.IsValid)
+					{
+						<#= bsClassName #> bs = new <#= bsClassName #>();
+						bs.Ekle(dto);
+						MesajEkleBasari(" <#=typeLibraryClassName #>  başarı ile eklenmiştir");
+						return RedirectToAction("Index");
+					}
+				}
+				catch (Exception ex)
+				{
+					MesajEkleHata("Ekleme İşlemi Sırasında Hata oluştu",ex,dto);
+				}
+				return View(dto);
+        }
+
+        //
+        // GET: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Guncelle/5
+
+        public ActionResult Guncelle(int key)
+        {
+			<#= bsClassName #> bs = new <#= bsClassName #>();
+			<#=typeLibraryClassName #> dto = bs.Sorgula<#=typeLibraryClassName #>KeyIle(key);
+			if (dto == null)
+			{
+				return HttpNotFound();
+			}
+			return View(dto);
+        }
+
+        //
+        // POST: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Guncelle/5
+
+        [HttpPost]
+        public ActionResult Guncelle(int key, <#=typeLibraryClassName #> dto)
+        {
+			  try
+				{
+					if (ModelState.IsValid)
+					{
+						<#= bsClassName #> bs = new <#= bsClassName #>();
+						bs.Guncelle(dto);
+						MesajEkleBasari("<#=typeLibraryClassName #>  başarı ile güncellenmiştir");
+						return RedirectToAction("Index");
+					}
+				}
+				catch (Exception ex)
+				{
+					MesajEkleHata("Ekleme İşlemi Sırasında Hata oluştu",ex,dto);
+				}
+				return View(dto);
+        }
+
+        //
+        // GET: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Sil/5
+
+        public ActionResult Sil(int key)
+        {
+         	<#= bsClassName #> bs = new <#= bsClassName #>();
+			<#=typeLibraryClassName #> dto = bs.Sorgula<#=typeLibraryClassName #>KeyIle(key);
+			if (dto == null)
+			{
+				return HttpNotFound();
+			}
+			return View(dto);
+        }
+
+        //
+        // POST: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Sil/5
+
+        [HttpPost]
+        public ActionResult Sil(int key,  <#=typeLibraryClassName #> dto)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Edit/5
-
-        public ActionResult Guncelle(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Edit/5
-
-        [HttpPost]
-        public ActionResult Guncelle(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Delete/5
-
-        public ActionResult Sil(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: <#= (!String.IsNullOrEmpty(mvcHost.AreaName)) ? ("/" + mvcHost.AreaName) : String.Empty #>/<#= mvcHost.ControllerRootName #>/Delete/5
-
-        [HttpPost]
-        public ActionResult Sil(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
+	         	<#= bsClassName #> bs = new <#= bsClassName #>();
+				bs.Sil(key);
                 return RedirectToAction("Index");
             }
             catch
