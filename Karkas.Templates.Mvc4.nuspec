@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Karkas.Templates.Mvc4</id>
+        <version>0.01</version>
+        <title>Karkas Twitter Bootstrap Templates (Controller/Views) for ASP.Net MVC 4</title>
+        <authors>Atilla Ozgur</authors>
+        <owners>Atilla Ozgur</owners>
+        <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+        <projectUrl>https://github.com/ati-ozgur/Karkas.Templates.Mvc4</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Bu şablonlar Karkas kullanan projeler için hazırlanmıştır. Ekranlarda bootstrap kullanılacağı düşünülmüştür.</description>
+    </metadata>
+</package>
