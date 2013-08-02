@@ -11,4 +11,10 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Bu şablonlar Karkas kullanan projeler için hazırlanmıştır. Ekranlarda bootstrap kullanılacağı düşünülmüştür.</description>
     </metadata>
+	    <files>
+		
+			<file src="content\**\*.*" exclude="**\*.log" target="content" />
+		
+    </files>
+	
 </package>
